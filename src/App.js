@@ -1,11 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
 import { Layout } from 'antd';
 import { ContentComponent } from './ContentComponent';
 import { HeaderComponent } from './HeaderComponent';
 import { FooterComponent } from './FooterComponent';
 
-const { Header, Content, Footer } = Layout;
+const { Content } = Layout;
 
 const App = () => (
   <Layout>

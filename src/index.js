@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import Chapter1 from "./pages/LearningPages/chapter1";
+import Chapter1 from "./LearningPages/chapter1";
 import {
   createBrowserRouter,
   RouterProvider,
