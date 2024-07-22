@@ -1,215 +1,337 @@
-// import React, { useRef, useEffect } from "react";
-// import Webcam from "react-webcam";
-// import { Hands, HAND_CONNECTIONS } from "@mediapipe/hands";
-// import {
-//   drawConnectors,
-//   drawLandmarks,
-// } from "@mediapipe/drawing_utils/drawing_utils";
-// import { Camera } from "@mediapipe/camera_utils/camera_utils";
+import { useEffect, useState, useRef } from "react";
 
-// const Chapter1 = () => {
-//   const webcamRef = useRef(null);
-//   const canvasRef = useRef(null);
+// eslint-disable-next-line import/no-unresolved
+import {
+  GestureRecognizer,
+  FilesetResolver,
+  DrawingUtils,
+} from "@mediapipe/tasks-vision";
+import { Flex, Modal, Steps } from "antd";
 
-//   useEffect(() => {
-//     // 初始化Hands对象，并指定资源文件的路径
-//     const hands = new Hands({
-//       locateFile: (file) => {
-        
-//         return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.3.1626903359/${file}`;
-//       },
-//     });
-//     console.log(Hands.VERSION);
-//      // 设置Hands对象的选项
-//      hands.setOptions({
-//       maxNumHands: 2, // 最多检测两只手
-//       minDetectionConfidence: 0.5, // 最小检测置信度
-//       minTrackingConfidence: 0.5, // 最小跟踪置信度
-//     });
-//     // 定义Hands对象的回调函数
-//     hands.onResults(onResults);
-//     // 如果Webcam元素已加载
-//     if (
-//       typeof webcamRef.current !== "undefined" &&
-//       webcamRef.current !== null
-//     ) {
-//       // 初始化Camera对象，并设置帧处理函数
-//       const camera = new Camera(webcamRef.current.video, {
-//         onFrame: async () => {
-//           await hands.send({ image: webcamRef.current.video });
-//         },
-//         width: 1280,
-//         height: 720,
-//       });
-//       camera.start();
-//     }
-//   }, []);
-//  // 定义Hands对象的结果处理函数
-//   const onResults = (results) => {
-//     const videoWidth = webcamRef.current.video.videoWidth;
-//     const videoHeight = webcamRef.current.video.videoHeight;
-//     canvasRef.current.width = videoWidth;
-//     canvasRef.current.height = videoHeight;
-//     const canvasElement = canvasRef.current;
-//     const canvasCtx = canvasElement.getContext("2d");
-//     canvasCtx.save();
-//     canvasCtx.clearRect(0, 0, videoWidth, videoHeight);
-//     canvasCtx.translate(videoWidth, 0);
-//     canvasCtx.scale(-1, 1);   // 翻转画布，使得视频和绘图对齐
-//     canvasCtx.drawImage(
-//       results.image,
-//       0,
-//       0,
-//       canvasElement.width,
-//       canvasElement.height
-//     );
-//     // 绘制手部关键点和连接线
-//     if (results.multiHandLandmarks) {
-      
-//       for (const landmarks of results.multiHandLandmarks) {
-//         drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {
-//           color: "#00FF00",
-//           lineWidth: 5,
-//         });
-//         drawLandmarks(canvasCtx, landmarks, { color: "#FFFFFF", lineWidth: 2 });
-//       }
-//     }
-//     canvasCtx.restore();
-//   };
-
-//   return (
-//     <div>
-//       <Webcam
-//         audio={false}
-//         mirrored={true}
-//         ref={webcamRef}
-//         style={{
-//           position: "absolute",
-//           marginLeft: "auto",
-//           marginRight: "auto",
-//           left: "0",
-//           right: "0",
-//           textAlign: "center",
-//           zindex: 9,
-//           width: 800,
-//           height: 600,
-//         }}
-//       />
-//       <canvas
-//         ref={canvasRef}
-//         style={{
-//           position: "absolute",
-//           marginLeft: "auto",
-//           marginRight: "auto",
-//           left: "0",
-//           right: "0",
-//           textAlign: "center",
-//           zindex: 9,
-//           width: 800,
-//           height: 600,
-//         }}
-//       ></canvas>
-//     </div>
-//   );
-// };
-
-// export default Chapter1;
-import React, { useEffect, useRef, useState } from "react";
-import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
-import hand_landmarker_task from "../models/hand_landmarker.task";
+const items = [
+  { title: "Closed_Fist" },
+  { title: "Open_Palm" },
+  { title: "Pointing_Up" },
+  { title: "Thumb_Down" },
+  { title: "Thumb_Up" },
+  { title: "Victory" },
+  { title: "ILoveYou" },
+];
 
 const Chapter1 = () => {
-    const videoRef = useRef(null);
-    const canvasRef = useRef(null);
-    const [handPresence, setHandPresence] = useState(null);
+  useEffect(() => {
+    const demosSection = document.getElementById("demos");
+    let gestureRecognizer;
+    let runningMode = "IMAGE";
+    let enableWebcamButton;
+    let webcamRunning = false;
+    const videoHeight = "360px";
+    const videoWidth = "480px";
 
-    useEffect(() => {
-        let handLandmarker;
-        let animationFrameId;
+    // Before we can use HandLandmarker class we must wait for it to finish
+    // loading. Machine Learning models can be large and take a moment to
+    // get everything needed to run.
+    const createGestureRecognizer = async () => {
+      console.log(
+        "%c Line:27 🍡 FilesetResolver",
+        "color:#ed9ec7",
+        FilesetResolver
+      );
+      const vision = await FilesetResolver.forVisionTasks(
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"
+      );
+      gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
+        baseOptions: {
+          modelAssetPath:
+            "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task",
+          delegate: "GPU",
+        },
+        runningMode: runningMode,
+      });
+      demosSection?.classList.remove("invisible");
+    };
+    createGestureRecognizer();
 
-        const initializeHandDetection = async () => {
-            try {
-                const vision = await FilesetResolver.forVisionTasks(
-                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm",
-                );
-                handLandmarker = await HandLandmarker.createFromOptions(
-                    vision, {
-                        baseOptions: { modelAssetPath: hand_landmarker_task },
-                        numHands: 2,
-                        runningMode: "video"
-                    }
-                );
-                detectHands();
-            } catch (error) {
-                console.error("Error initializing hand detection:", error);
+    /********************************************************************
+// Demo 1: Detect hand gestures in images
+********************************************************************/
+
+    const imageContainers = document.getElementsByClassName("detectOnClick");
+
+    for (let i = 0; i < imageContainers.length; i++) {
+      imageContainers[i].children[0].addEventListener("click", handleClick);
+    }
+
+    async function handleClick(event) {
+      if (!gestureRecognizer) {
+        alert("Please wait for gestureRecognizer to load");
+        return;
+      }
+
+      if (runningMode === "VIDEO") {
+        runningMode = "IMAGE";
+        await gestureRecognizer.setOptions({ runningMode: "IMAGE" });
+      }
+      // Remove all previous landmarks
+      const allCanvas =
+        event.target.parentNode.getElementsByClassName("canvas");
+      for (var i = allCanvas.length - 1; i >= 0; i--) {
+        const n = allCanvas[i];
+        n.parentNode.removeChild(n);
+      }
+
+      const results = gestureRecognizer.recognize(event.target);
+
+      // View results in the console to see their format
+      console.log(results);
+      if (results.gestures.length > 0) {
+        const p = event.target.parentNode.childNodes[3];
+        p.setAttribute("class", "info");
+
+        const categoryName = results.gestures[0][0].categoryName;
+        const categoryScore = parseFloat(
+          (results.gestures[0][0].score * 100).toString()
+        ).toFixed(2);
+        const handedness = results.handednesses[0][0].displayName;
+
+        p.innerText = `GestureRecognizer: ${categoryName}\n Confidence: ${categoryScore}%\n Handedness: ${handedness}`;
+        p.style =
+          "left: 0px;" +
+          "top: " +
+          event.target.height +
+          "px; " +
+          "width: " +
+          (event.target.width - 10) +
+          "px;";
+
+        const canvas = document.createElement("canvas");
+        canvas.setAttribute("class", "canvas");
+        canvas.setAttribute("width", event.target.naturalWidth + "px");
+        canvas.setAttribute("height", event.target.naturalHeight + "px");
+        canvas.style =
+          "left: 0px;" +
+          "top: 0px;" +
+          "width: " +
+          event.target.width +
+          "px;" +
+          "height: " +
+          event.target.height +
+          "px;";
+
+        event.target.parentNode.appendChild(canvas);
+        const canvasCtx = canvas.getContext("2d");
+        const drawingUtils = new DrawingUtils(canvasCtx);
+        for (const landmarks of results.landmarks) {
+          drawingUtils.drawConnectors(
+            landmarks,
+            GestureRecognizer.HAND_CONNECTIONS,
+            {
+              color: "#00FF00",
+              lineWidth: 5,
             }
-        };
+          );
+          drawingUtils.drawLandmarks(landmarks, {
+            color: "#FF0000",
+            lineWidth: 1,
+          });
+        }
+      }
+    }
 
-    const drawLandmarks = (landmarksArray) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'white';
+    /********************************************************************
+// Demo 2: Continuously grab image from webcam stream and detect it.
+********************************************************************/
 
-    landmarksArray.forEach(landmarks => {
-        landmarks.forEach(landmark => {
-            const x = landmark.x * canvas.width;
-            const y = landmark.y * canvas.height;
+    const video = document.getElementById("webcam");
+    const canvasElement = document.getElementById("output_canvas");
+    const canvasCtx = canvasElement?.getContext("2d");
+    const gestureOutput = document.getElementById("gesture_output");
 
-            ctx.beginPath();
-            ctx.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle for each landmark
-            ctx.fill();
-        });
-    });
-};
+    // Check if webcam access is supported.
+    function hasGetUserMedia() {
+      return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+    }
 
-        const detectHands = () => {
-            if (videoRef.current && videoRef.current.readyState >= 2) {
-                const detections = handLandmarker.detectForVideo(videoRef.current, performance.now());
-                setHandPresence(detections.handednesses.length > 0);
+    // If webcam supported, add event listener to button for when user
+    // wants to activate it.
+    if (hasGetUserMedia()) {
+      enableWebcamButton = document.getElementById("webcamButton");
+      enableWebcamButton.addEventListener("click", enableCam);
+    } else {
+      console.warn("getUserMedia() is not supported by your browser");
+    }
 
-                // Assuming detections.landmarks is an array of landmark objects
-                if (detections.landmarks) {
-                    drawLandmarks(detections.landmarks);
-                }
+    // Enable the live webcam view and start detection.
+    function enableCam() {
+      if (!gestureRecognizer) {
+        alert("Please wait for gestureRecognizer to load");
+        return;
+      }
+
+      if (webcamRunning === true) {
+        webcamRunning = false;
+        enableWebcamButton.innerText = "ENABLE PREDICTIONS";
+      } else {
+        webcamRunning = true;
+        enableWebcamButton.innerText = "DISABLE PREDICTIONS";
+      }
+
+      // getUsermedia parameters.
+      const constraints = {
+        video: true,
+      };
+
+      // Activate the webcam stream.
+      navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+        if (video) {
+          video.srcObject = stream;
+          video.addEventListener("loadeddata", predictWebcam);
+        }
+      });
+    }
+
+    let lastVideoTime = -1;
+    let results = undefined;
+    async function predictWebcam() {
+      const webcamElement = document.getElementById("webcam");
+      // Now let's start detecting the stream.
+      if (runningMode === "IMAGE") {
+        runningMode = "VIDEO";
+        await gestureRecognizer.setOptions({ runningMode: "VIDEO" });
+      }
+      let nowInMs = Date.now();
+      if (video.currentTime !== lastVideoTime) {
+        lastVideoTime = video.currentTime;
+        results = gestureRecognizer.recognizeForVideo(video, nowInMs);
+      }
+
+      canvasCtx.save();
+      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+      const drawingUtils = new DrawingUtils(canvasCtx);
+
+      canvasElement.style.height = videoHeight;
+      webcamElement.style.height = videoHeight;
+      canvasElement.style.width = videoWidth;
+      webcamElement.style.width = videoWidth;
+
+      if (results.landmarks) {
+        for (const landmarks of results.landmarks) {
+          drawingUtils.drawConnectors(
+            landmarks,
+            GestureRecognizer.HAND_CONNECTIONS,
+            {
+              color: "#00FF00",
+              lineWidth: 5,
             }
-            requestAnimationFrame(detectHands);
-        };
+          );
+          drawingUtils.drawLandmarks(landmarks, {
+            color: "#FF0000",
+            lineWidth: 2,
+          });
+        }
+      }
+      canvasCtx.restore();
+      if (results.gestures.length > 0) {
+        gestureOutput.style.display = "block";
+        gestureOutput.style.width = videoWidth;
+        const value1 = results.gestures[0][0].categoryName;
+        setCategoryName(value1);
 
-        const startWebcam = async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                videoRef.current.srcObject = stream;
-                await initializeHandDetection();
-            } catch (error) {
-                console.error("Error accessing webcam:", error);
-            }
-        };
+        const value2 = parseFloat(
+          (results.gestures[0][0].score * 100).toString()
+        ).toFixed(2);
+        setCategoryScore(value2);
+        const handedness = results.handednesses[0][0].displayName;
+        gestureOutput.innerText = `GestureRecognizer: ${value1}\n Confidence: ${value2} %\n Handedness: ${handedness}`;
+      } else {
+        gestureOutput.style.display = "none";
+      }
+      // Call this function again to keep predicting when the browser is ready.
+      if (webcamRunning === true) {
+        window.requestAnimationFrame(predictWebcam);
+      }
+    }
+  }, []);
 
-        startWebcam();
+  const [categoryScore, setCategoryScore] = useState(0);
+  const [categoryName, setCategoryName] = useState(null);
+  const [current, setCurrent] = useState(0);
 
-        return () => {
-            if (videoRef.current && videoRef.current.srcObject) {
-                videoRef.current.srcObject.getTracks().forEach(track => track.stop());
-            }
-            if (handLandmarker) {
-                handLandmarker.close();
-            }
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-            }
-        };
-    }, []);
+  const next = () => {
+    setCurrent((prev) => prev + 1);
+  };
 
-    return (
-        <>
-        <h1>Is there a Hand? {handPresence ? "Yes" : "No"}</h1>
-        <div style={{ position: "relative" }}>
-            <video ref={videoRef} autoPlay playsInline ></video>
-            <canvas ref={canvasRef} style={{ backgroundColor: "black" , width:"600px", height:"480px"}}></canvas>
-        </div>
-    </>
-    );
+  const isShowTip = useRef(false);
+
+  useEffect(() => {
+    if (current <= items.length && categoryScore >=70) {
+      const title = items[current]?.title;
+      const bool = title === categoryName;
+      if (bool) {
+        next();
+
+        if (title === items.at(-1)?.title && !isShowTip.current) {
+          isShowTip.current = true;
+          Modal.confirm({
+            title: "成功 ！",
+            width: 240,
+            centered: true,
+            cancelButtonProps: { style: { display: "none" } },
+            maskClosable: false,
+            keyboard: false,
+            okText: "确定",
+            onOk: () => {
+              isShowTip.current = false;
+            },
+          });
+        }
+      }
+    }
+  }, [categoryName, categoryScore, current]);
+
+  return (
+    <Flex>
+      <Steps
+        style={{ width: 200 }}
+        direction="vertical"
+        current={current}
+        items={items}
+      />
+
+      <div>
+        <h1>categoryName:{categoryName}</h1>
+        <h1>
+          Is there a Hand?{" "}
+          {categoryScore >= 70 ? (
+            <span style={{ color: "green" }}>Yes</span>
+          ) : (
+            <span style={{ color: "red" }}>No</span>
+          )}
+          <h6>categoryScore:{categoryScore}</h6>
+        </h1>
+
+        <section id="demos" className="invisible">
+          <div id="liveView" className="videoView">
+            <button id="webcamButton" className="mdc-button mdc-button--raised">
+              <span className="mdc-button__ripple"></span>
+              <span className="mdc-button__label">ENABLE WEBCAM</span>
+            </button>
+            <div style={{ position: "relative" }}>
+              <video id="webcam" autoPlay playsInline></video>
+              <canvas
+                className="output_canvas"
+                id="output_canvas"
+                width="1280"
+                height="720"
+                style={{ position: "absolute", left: "0px", top: "0px" }}
+              ></canvas>
+              <p id="gesture_output" className="output" />
+            </div>
+          </div>
+        </section>
+      </div>
+    </Flex>
+  );
 };
 
 export default Chapter1;
