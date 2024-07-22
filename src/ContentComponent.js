@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Progress, Row, Col } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const cardData = [
     { id: 1, smallTitle: '小标题1', mainTitle: '加粗大标题1', description: '这是一个小的说明文字。', progress: 70, completed: true },
@@ -24,7 +24,7 @@ export const ContentComponent = () => {
                 <Row key={item.id} gutter={[16, 16]} style={{ marginBottom: '16px' }}>
                     <Col span={24}>
                         {index === 0 ? (
-                            <Card hoverable onClick={() => handleCardClick(navigate, "/pages/LearningPages/chapter1")} style={{ cursor: 'pointer' }}>
+                            <Card hoverable onClick={() => handleCardClick(navigate, "LearningPages/chapter1")} style={{ cursor: 'pointer' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div style={{ flex: 1, paddingRight: '20px' }}>
                                         <div style={{ marginBottom: '10px', fontSize: '14px', backgroundColor: 'rgba(255, 165, 0, 0.5)', borderRadius: '8px', padding: '2px 8px', display: 'inline-block' }}>

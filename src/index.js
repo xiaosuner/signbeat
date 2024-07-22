@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import Chapter1 from "./LearningPages/chapter1";
+import MusicGame from "./MusicGame/musicGame";
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+
 
 const router = createBrowserRouter([
   {
@@ -14,8 +16,12 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "pages/LearningPages/chapter1",
+    path: "LearningPages/chapter1",
     element: <Chapter1 />,
+  },
+  {
+    path: "MusicGame/musicGame",
+    element: <MusicGame />,
   },
 ]);
 // const root = ReactDOM.createRoot(document.getElementById('root'));
