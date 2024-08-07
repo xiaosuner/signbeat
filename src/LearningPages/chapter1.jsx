@@ -9,13 +9,13 @@ import { Flex, Modal, Steps } from "antd";
 import gesture_recognizer_task from "../models/gesture_recognizer.task";
 
 const items = [
-  { title: "Closed_Fist" },
-  { title: "Open_Palm" },
-  { title: "Pointing_Up" },
-  { title: "Thumb_Down" },
-  { title: "Thumb_Up" },
-  { title: "Victory" },
-  { title: "ILoveYou" },
+  { title: "Closed_Fist", gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png"},
+  { title: "Open_Palm", gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg" },
+  { title: "Pointing_Up" , gif: "https://image.pngaaa.com/441/1126441-middle.png"},
+  { title: "Thumb_Down", gif: "https://cdn-icons-png.flaticon.com/512/10187/10187338.png" },
+  { title: "Thumb_Up" , gif: "https://static.vecteezy.com/system/resources/previews/000/553/899/original/vector-cartoon-hand-making-positive-thumbs-up-gesture.jpg"},
+  { title: "Victory" , gif: "https://th.bing.com/th/id/OIP.t8Mwhbq4I7WUdKUORpokFwHaEK?rs=1&pid=ImgDetMain"},
+  { title: "ILoveYou", gif: "https://png.pngtree.com/png-vector/20221222/ourlarge/pngtree-cartoon-hand-drawn-i-love-you-gesture-line-illustration-vector-decoration-png-image_6487645.png" },
 ];
 
 const Chapter1 = () => {
@@ -262,10 +262,13 @@ const Chapter1 = () => {
   return (
     <Flex>
       <Steps
-        style={{ width: 200 }}
+        style={{ width: 300 }}
         direction="vertical"
         current={current}
-        items={items}
+        items={items.map(item => ({
+          title: item.title,
+          description: <img src={item.gif} alt={item.title} style={{ width: '180px', height: '150px' }} />,
+        }))}
       />
 
       <div>
