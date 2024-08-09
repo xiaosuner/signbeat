@@ -24,22 +24,11 @@ const router = createBrowserRouter([
     element: <MusicGame />,
   },
 ]);
-// const root = ReactDOM.createRoot(document.getElementById('root'));
-// root.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>
-// );
 
 function startup() {
   const rootElement = document.getElementById("root");
   ReactDOM.createRoot(rootElement).render(
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
-    // <React.StrictMode>
-    //   <App />
-    // </React.StrictMode>
+    <RouterProvider router={router} />
   )
 }
 startup();
