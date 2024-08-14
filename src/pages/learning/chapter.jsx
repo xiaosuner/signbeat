@@ -1,25 +1,18 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom"; // 引入 useNavigate 钩子
 import {
   GestureRecognizer,
   FilesetResolver,
   DrawingUtils,
 } from "@mediapipe/tasks-vision";
 import { Flex, Modal, Steps } from "antd";
-import gesture_recognizer_task from "../models/gesture_recognizer.task";
+import gesture_recognizer_task from "../../config/models/gesture_recognizer.task";
+import { useToMusicGame } from "../../config/app-router/navigate";
+import { useCurrChapterLearning } from "../../utils/hooks/chapter";
 
-const items = [
-  { title: "Closed_Fist", gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png"},
-  { title: "Open_Palm", gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg" },
-  { title: "Pointing_Up" , gif: "https://image.pngaaa.com/441/1126441-middle.png"},
-  { title: "Thumb_Down", gif: "https://cdn-icons-png.flaticon.com/512/10187/10187338.png" },
-  { title: "Thumb_Up" , gif: "https://static.vecteezy.com/system/resources/previews/000/553/899/original/vector-cartoon-hand-making-positive-thumbs-up-gesture.jpg"},
-  { title: "Victory" , gif: "https://th.bing.com/th/id/OIP.t8Mwhbq4I7WUdKUORpokFwHaEK?rs=1&pid=ImgDetMain"},
-  { title: "ILoveYou", gif: "https://png.pngtree.com/png-vector/20221222/ourlarge/pngtree-cartoon-hand-drawn-i-love-you-gesture-line-illustration-vector-decoration-png-image_6487645.png" },
-];
+const Chapter = () => {
+  const toMusicGame = useToMusicGame();
 
-const Chapter1 = () => {
-  const navigate = useNavigate(); // 使用 useNavigate 钩子
+  const [items, chapter] = useCurrChapterLearning();
 
   useEffect(() => {
     const demosSection = document.getElementById("demos");
@@ -231,7 +224,6 @@ const Chapter1 = () => {
   };
 
   const isShowTip = useRef(false);
-
   useEffect(() => {
     if (current <= items.length && categoryScore >= 70) {
       const title = items[current]?.title;
@@ -251,13 +243,13 @@ const Chapter1 = () => {
             okText: "确定",
             onOk: () => {
               isShowTip.current = false;
-              navigate("../MusicGame/musicGame"); // 点击确定后跳转到 musicGame 页面
+              toMusicGame(chapter); // 点击确定后跳转到 musicGame 页面
             },
           });
         }
       }
     }
-  }, [categoryName, categoryScore, current, navigate]);
+  }, [categoryName, categoryScore, chapter, current, items, toMusicGame]);
 
   return (
     <Flex>
@@ -265,9 +257,15 @@ const Chapter1 = () => {
         style={{ width: 300 }}
         direction="vertical"
         current={current}
-        items={items.map(item => ({
+        items={items.map((item) => ({
           title: item.title,
-          description: <img src={item.gif} alt={item.title} style={{ width: '180px', height: '150px' }} />,
+          description: (
+            <img
+              src={item.gif}
+              alt={item.title}
+              style={{ width: "180px", height: "150px" }}
+            />
+          ),
         }))}
       />
 
@@ -280,7 +278,7 @@ const Chapter1 = () => {
           ) : (
             <span style={{ color: "red" }}>No</span>
           )}
-          <h6>categoryScore:{categoryScore}</h6>
+          <p>categoryScore:{categoryScore}</p>
         </h1>
 
         <section id="demos" className="invisible">
@@ -307,4 +305,4 @@ const Chapter1 = () => {
   );
 };
 
-export default Chapter1;
+export default Chapter;

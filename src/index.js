@@ -1,35 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import Chapter1 from "./LearningPages/chapter1";
-import MusicGame from "./MusicGame/musicGame";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import React from "react";
+import ReactDOM from "react-dom/client";
 
+import { RouterProvider } from "react-router-dom";
+import { AppRouter } from "./config/app-router/app-router";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
-  {
-    path: "LearningPages/chapter1",
-    element: <Chapter1 />,
-  },
-  {
-    path: "MusicGame/musicGame",
-    element: <MusicGame />,
-  },
-]);
+import "./index.css";
+import "antd/dist/reset.css";
 
-function startup() {
-  const rootElement = document.getElementById("root");
-  ReactDOM.createRoot(rootElement).render(
-    <RouterProvider router={router} />
-  )
-}
-startup();
-
+const rootElement = document.getElementById("root");
+ReactDOM.createRoot(rootElement).render(<RouterProvider router={AppRouter} />);
