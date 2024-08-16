@@ -1,14 +1,15 @@
 import React from "react";
 import { Layout, Menu } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
+import "E:/SignLanguageGame/signbeats/src/index.css";
 
 const { Footer } = Layout;
 
 export const FooterComponent = () => (
   <Footer style={{ position: "fixed", bottom: 0, width: "100%", padding: 0 }}>
     <Menu
+      className="FooterComponent"
       mode="horizontal"
-      style={{ display: "flex", justifyContent: "space-around" }}
       items={[
         {
           key: "home",
