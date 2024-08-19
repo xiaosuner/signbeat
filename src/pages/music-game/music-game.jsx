@@ -177,10 +177,7 @@ const MusicGame = () => {
           playsInline
           style={{ display: "none" }}
         ></video>
-        <canvas
-          ref={canvasRef}
-          width="480"
-          height="360"
+        <div
           style={{
             position: "absolute",
             left: "50%",
@@ -188,7 +185,15 @@ const MusicGame = () => {
             transform: "translate(-50%, -50%)",
             zIndex: 10,
           }}
-        ></canvas>
+        >
+          <canvas
+            ref={canvasRef}
+            width="480"
+            height="360"
+            className="output_canvas"
+          ></canvas>
+        </div>
+
         {!isReady && (
           <div
             style={{
