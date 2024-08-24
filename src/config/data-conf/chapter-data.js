@@ -1,4 +1,4 @@
-import music1 from "../../assets/mp3/music01.mp3";
+import music1 from "../../assets/mp3/Greetings and Goodbyes.mp3";
 import music2 from "../../assets/mp3/music02.mp3";
 
 export const chapterData = [

@@ -1,27 +1,58 @@
 const lyrics = [
     {
-        time: 0,
-        text: "Line 1 of the lyrics",
+        starttime: 9,
         words: [
-            { time: 0, word: "Line" },
-            { time: 1, word: "1" },
-            { time: 2, word: "of" },
-            { time: 3, word: "the" },
-            { time: 4, word: "lyrics" },
-        ],
-    },
-    {
-        time: 10,
-        text: "Line 2 of the lyrics",
-        words: [
-            { time: 10, word: "Line" },
-            { time: 11, word: "2" },
-            { time: 12, word: "of" },
-            { time: 13, word: "the" },
-            { time: 14, word: "lyrics" },
-        ],
+            { time: 9, word: "你好", recognize: true },
+            { time: 9.8, word: "朋友", recognize: false },
+            { time: 10.5, word: "很高兴", recognize: true },
+            { time: 11, word: "认识", recognize: true },
+            { time: 11.5, word: "你", recognize: true },
+            { time: 12, word: "感谢", recognize: true },
+            { time: 13, word: "有", recognize: false },
+            { time: 14, word: "你", recognize: true },
+            { time: 15, word: "请", recognize: false },
+            { time: 16, word: "保持", recognize: false },
+            { time: 17, word: "快乐", recognize: true },
+        ]
     },
     // Add more lines here
 ];
 
 export default lyrics;
+
+
+// [Verse 1]
+// 你好，朋友，很高兴认识你，
+// 感谢有你，请保持快乐，
+// 我的名字叫张三，
+// 好久不见，带着微笑。
+
+// [Verse 2]
+// 你好，朋友，让我们一起笑，
+// 时光匆匆就这样过去了，
+// 朋友们，一起来享受，
+// 幸福快乐的每一天。
+
+// [Chorus]
+// 你好，朋友，再见会再相聚，
+// 每次见面都是新的开始，
+// 开心愉快的时光，
+// 感谢有你在身边。
+
+// [Verse 3]
+// 春天到夏天，景色多美好，
+// 秋风扫过冬日的霜雪，
+// 岁月虽快，友情常在，
+// 你我共享这份欢喜。
+
+// [Bridge]
+// 风轻轻吹过，云悠悠飘过，
+// 远方的记忆，怎能忘记，
+// 每次重逢都笑颜开，
+// 友谊常在，不曾减退。
+
+// [Chorus]
+// 你好，朋友，再见总会再相聚，
+// 每次见面都是新的开始，
+// 开心愉快的时光，
+// 每一天都如此精彩。
