@@ -92,10 +92,7 @@ const MusicGame = () => {
       fn.current();
     }
   );
-  const handleLineChange = (line) => {
-    console.log("当前歌词行：", line.text);
-    // 根据歌词内容调整手势识别逻辑
-};
+
   const { run } = useThrottleFn(setCategory, { wait: 100 });
 
   const initializeGestureRecognizer = useMemoizedFn(async () => {
@@ -219,7 +216,7 @@ const MusicGame = () => {
           <h1>Gesture: {category?.categoryName}</h1>
           <h1>Confidence: {score}%</h1>
         </div>
-        <Song currentSong={currentSong} currentTime={songInfo.currentTime} onLineChange={handleLineChange} style={{ marginTop: "2rem" }}/>
+        <Song currentSong={currentSong} currentTime={songInfo.currentTime} style={{ marginTop: "2rem" }}/>
       </Content>
     </Layout>
   );

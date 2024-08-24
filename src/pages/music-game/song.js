@@ -10,7 +10,7 @@ const Song = ({ currentSong, currentTime }) => {
 
     useEffect(() => {
         // Find the current line based on the playback time
-        const line = lyrics.find((lyric) => currentTime >= lyric.time && currentTime < (lyric.time + 10));
+        const line = lyrics.find((lyric) => currentTime >= lyric.starttime && currentTime < (lyric.starttime + 10));
         if (line) {
             setCurrentLine(line);
         }
