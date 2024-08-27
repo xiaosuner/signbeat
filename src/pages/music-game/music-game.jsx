@@ -11,6 +11,7 @@ import gesture_recognizer_task from "../../config/models/gesture_recognizer.task
 
 import { useMemoizedFn, useMount, useThrottleFn, useUnmount } from "ahooks";
 import { useCurrChapterMusicGame } from "../../utils/hooks/chapter";
+import lyrics from "./lyrics";
 
 const { Content } = Layout;
 
@@ -26,6 +27,10 @@ const MusicGame = () => {
   const [category, setCategory] = useState(null);
   const [isReady, setIsReady] = useState(false);
   const [startText, setStartText] = useState("准备好了吗？");
+
+  //手势识别
+  const [currentWord, setCurrentWord] = useState(null);
+  const [gestureResult, setGestureResult] = useState(null);
 
   // References for video and canvas
   const videoRef = useRef(null);
@@ -54,8 +59,9 @@ const MusicGame = () => {
             console.error(error);
           }
         }
-
+        
         const results = gestureRecognizer.recognizeForVideo(video, Date.now());
+        
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         // Draw the video frame to the canvas
@@ -80,9 +86,10 @@ const MusicGame = () => {
 
         if (results.gestures.length > 0) {
           const gesture = results.gestures[0][0];
-
+          setGestureResult(gesture); // 更新手势结果状态
           run(gesture);
         } else {
+          setGestureResult(null); // 清除手势结果状态
           run(null);
         }
 
@@ -148,6 +155,37 @@ const MusicGame = () => {
       }, 1000);
     }
   }, [category, isReady, score]);
+
+  useEffect(() => {
+    // 只有在音乐播放时才打印进度
+    if (isPlaying) {
+      console.log(`当前播放时间：${songInfo.currentTime.toFixed(2)}秒`);
+    }
+  }, [songInfo.currentTime, isPlaying]);  // 依赖项包括currentTime和isPlaying，确保任何一个变化都能触发更新
+  //显示当前词
+  useEffect(() => {
+    const word = lyrics.flatMap(line => line.words).find(w => w.time.toFixed(1) === songInfo.currentTime.toFixed(1));
+    console.log("word：",word)
+    setCurrentWord(word);
+  }, [songInfo.currentTime]);
+  //判断手势
+  useEffect(() => {
+    if (currentWord && currentWord.recognize) {
+      // 检查手势是否符合要求
+      //console.log("当前单词：",currentWord.word)
+      if (gestureResult?.categoryName === currentWord.expectedGesture) {
+        console.log("当前手势：",gestureResult.categoryName)
+        console.log("手势正确");
+      } else {
+        console.log("手势错误");
+      }
+      const timeoutId = setTimeout(() => {
+        setCurrentWord(null);  // 超时自动失败消失
+      }, 2000);  // 超时时间为2秒
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [currentWord, gestureResult]);
 
   return (
     <Layout style={{ transition: "all 0.5s ease" }}>

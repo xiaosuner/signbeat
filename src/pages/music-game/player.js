@@ -29,6 +29,7 @@ const Player = ({
       setIsPlaying(!isPlaying);
     } else {
       audioRef.current.play();
+      audioRef.current.playbackRate = 0.8;  // 设置播放速度为0.8倍
       setIsPlaying(!isPlaying);
     }
   };
