@@ -11,33 +11,41 @@ export const chapterData = [
     completed: true,
     learning: [
       {
-        title: "Closed_Fist",
+        title: "你好",
+        gif: "https://image.pngaaa.com/441/1126441-middle.png",
+      },
+      {
+        title: "认识",
         gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
       },
       {
-        title: "Open_Palm",
+        title: "感谢",
         gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
       },
-      // {
-      //   title: "Pointing_Up",
-      //   gif: "https://image.pngaaa.com/441/1126441-middle.png",
-      // },
-      // {
-      //   title: "Thumb_Down",
-      //   gif: "https://cdn-icons-png.flaticon.com/512/10187/10187338.png",
-      // },
-      // {
-      //   title: "Thumb_Up",
-      //   gif: "https://static.vecteezy.com/system/resources/previews/000/553/899/original/vector-cartoon-hand-making-positive-thumbs-up-gesture.jpg",
-      // },
-      // {
-      //   title: "Victory",
-      //   gif: "https://th.bing.com/th/id/OIP.t8Mwhbq4I7WUdKUORpokFwHaEK?rs=1&pid=ImgDetMain",
-      // },
-      // {
-      //   title: "ILoveYou",
-      //   gif: "https://png.pngtree.com/png-vector/20221222/ourlarge/pngtree-cartoon-hand-drawn-i-love-you-gesture-line-illustration-vector-decoration-png-image_6487645.png",
-      // },
+      {
+        title: "我",
+        gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
+      },
+      {
+        title: "名字",
+        gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
+      },
+      {
+        title: "微笑",
+        gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
+      },
+      {
+        title: "时间",
+        gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
+      },
+      {
+        title: "幸福",
+        gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
+      },
+      {
+        title: "一天",
+        gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
+      },
     ],
     musicGame: [
       {
@@ -72,34 +80,46 @@ export const chapterData = [
     completed: false,
 
     learning: [
-      // {
-      //   title: "Closed_Fist",
-      //   gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
-      // },
-      // {
-      //   title: "Open_Palm",
-      //   gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
-      // },
       {
-        title: "Pointing_Up",
+        title: "你好",
         gif: "https://image.pngaaa.com/441/1126441-middle.png",
       },
       {
-        title: "Thumb_Down",
+        title: "高兴",
         gif: "https://cdn-icons-png.flaticon.com/512/10187/10187338.png",
       },
-      // {
-      //   title: "Thumb_Up",
-      //   gif: "https://static.vecteezy.com/system/resources/previews/000/553/899/original/vector-cartoon-hand-making-positive-thumbs-up-gesture.jpg",
-      // },
-      // {
-      //   title: "Victory",
-      //   gif: "https://th.bing.com/th/id/OIP.t8Mwhbq4I7WUdKUORpokFwHaEK?rs=1&pid=ImgDetMain",
-      // },
-      // {
-      //   title: "ILoveYou",
-      //   gif: "https://png.pngtree.com/png-vector/20221222/ourlarge/pngtree-cartoon-hand-drawn-i-love-you-gesture-line-illustration-vector-decoration-png-image_6487645.png",
-      // },
+      {
+        title: "认识",
+        gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
+      },
+      {
+        title: "感谢",
+        gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
+      },
+      {
+        title: "我",
+        gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
+      },
+      {
+        title: "名字",
+        gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
+      },
+      {
+        title: "微笑",
+        gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
+      },
+      {
+        title: "时间",
+        gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
+      },
+      {
+        title: "幸福",
+        gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
+      },
+      {
+        title: "一天",
+        gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
+      },
     ],
     musicGame: [
       {

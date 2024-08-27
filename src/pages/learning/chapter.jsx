@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import {
   GestureRecognizer,
   FilesetResolver,
@@ -8,6 +8,7 @@ import { Flex, Modal, Steps } from "antd";
 import gesture_recognizer_task from "../../config/models/gesture_recognizer3.task";
 import { useToMusicGame } from "../../config/app-router/navigate";
 import { useCurrChapterLearning } from "../../utils/hooks/chapter";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const Chapter = () => {
   const toMusicGame = useToMusicGame();
@@ -23,7 +24,7 @@ const Chapter = () => {
 
     const createGestureRecognizer = async () => {
       const vision = await FilesetResolver.forVisionTasks(
-       "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
       );
       gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
         baseOptions: {
@@ -61,7 +62,7 @@ const Chapter = () => {
       const constraints = {
         video: true,
       };
-  // Activate the webcam stream.
+      // Activate the webcam stream.
       navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
         if (video) {
           video.srcObject = stream;
@@ -78,10 +79,13 @@ const Chapter = () => {
         console.error("Canvas element or webcam element not found!");
         return;
       }
- // Now let's start detecting the stream.
+      // Now let's start detecting the stream.
       if (runningMode === "IMAGE") {
         runningMode = "VIDEO";
-        await gestureRecognizer.setOptions({ runningMode: "VIDEO" ,numHands: 2});
+        await gestureRecognizer.setOptions({
+          runningMode: "VIDEO",
+          numHands: 2,
+        });
       }
 
       let nowInMs = Date.now();
@@ -101,18 +105,17 @@ const Chapter = () => {
 
       if (results.landmarks) {
         for (const landmarks of results.landmarks) {
-
           drawingUtils.drawConnectors(
             landmarks,
             GestureRecognizer.HAND_CONNECTIONS,
             {
               color: "#00FF00",
-              lineWidth: 5
+              lineWidth: 5,
             }
           );
           drawingUtils.drawLandmarks(landmarks, {
             color: "#FF0000",
-            lineWidth: 2
+            lineWidth: 2,
           });
         }
       }
@@ -172,22 +175,29 @@ const Chapter = () => {
     }
   }, [categoryName, categoryScore, chapter, current, items, toMusicGame]);
 
+  const stepsItems = useMemo(() => {
+    return items.map((item, index) => ({
+      title: item.title,
+      description:
+        current === index ? (
+          <img
+            src={item.gif}
+            alt={item.title}
+            style={{ width: "180px", height: "150px" }}
+          />
+        ) : (
+          false
+        ),
+    }));
+  }, [items, current]);
+
   return (
     <Flex>
       <Steps
-        style={{ width: 300 }}
+        style={{ width: 500 }}
         direction="vertical"
         current={current}
-        items={items.map((item) => ({
-          title: item.title,
-          description: (
-            <img
-              src={item.gif}
-              alt={item.title}
-              style={{ width: "180px", height: "150px" }}
-            />
-          ),
-        }))}
+        items={stepsItems}
       />
 
       <div>
