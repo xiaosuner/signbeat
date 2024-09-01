@@ -7,15 +7,21 @@ import {
 } from "@mediapipe/tasks-vision";
 import Player from "./player";
 import Song from "./song";
-import gesture_recognizer_task from "../../config/models/gesture_recognizer.task"; // Adjust the path if necessary
+import gesture_recognizer_task from "../../config/models/gesture_recognizer3.task"; // Adjust the path if necessary
 
 import { useMemoizedFn, useMount, useThrottleFn, useUnmount } from "ahooks";
 import { useCurrChapterMusicGame } from "../../utils/hooks/chapter";
 import lyrics from "./lyrics";
 
+import { getCurrentWord } from "./utils";
+import { useSet } from "ahooks";
+import { message } from "antd";
+
 const { Content } = Layout;
 
 const runningMode = "VIDEO";
+
+const words = lyrics.flatMap((line) => line.words);
 
 const MusicGame = () => {
   const [songs] = useCurrChapterMusicGame();
@@ -28,8 +34,6 @@ const MusicGame = () => {
   const [isReady, setIsReady] = useState(false);
   const [startText, setStartText] = useState("准备好了吗？");
 
-  //手势识别
-  const [currentWord, setCurrentWord] = useState(null);
   const [gestureResult, setGestureResult] = useState(null);
 
   // References for video and canvas
@@ -37,7 +41,7 @@ const MusicGame = () => {
   const canvasRef = useRef(null);
 
   const updateTimeHandler = (e) => {
-    const currentTime = e.target.currentTime;
+    const currentTime = Number(e.target.currentTime.toFixed(2));
     const duration = e.target.duration;
     setSongInfo({ ...songInfo, currentTime, duration });
   };
@@ -59,9 +63,8 @@ const MusicGame = () => {
             console.error(error);
           }
         }
-        
+
         const results = gestureRecognizer.recognizeForVideo(video, Date.now());
-        
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         // Draw the video frame to the canvas
@@ -118,14 +121,19 @@ const MusicGame = () => {
         }
       );
       const constraints = { video: true };
-      navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.addEventListener("loadeddata", () =>
-            predictWebcam(gestureRecognizer, runningMode)
-          );
-        }
-      });
+      navigator.mediaDevices
+        .getUserMedia(constraints)
+        ?.then((stream) => {
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            videoRef.current.addEventListener("loadeddata", () =>
+              predictWebcam(gestureRecognizer, runningMode)
+            );
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     } catch (error) {
       console.error(error);
     }
@@ -143,11 +151,12 @@ const MusicGame = () => {
   }, [category?.score]);
 
   useEffect(() => {
-    if (!isReady && category?.categoryName === "Thumb_Up" && score > 70) {
+    if (!isReady && category?.categoryName === "感谢" && score > 70) {
       setStartText("Start");
       setTimeout(() => {
         setIsReady(true);
         setIsPlaying(true);
+        audioRef.current.playbackRate = 0.8;
         audioRef.current?.play().catch((err) => {
           console.log("%c Line:156 🥒 err", "color:#f5ce50", err);
         });
@@ -156,43 +165,61 @@ const MusicGame = () => {
     }
   }, [category, isReady, score]);
 
-  useEffect(() => {
-    // 只有在音乐播放时才打印进度
-    if (isPlaying) {
-      console.log(`当前播放时间：${songInfo.currentTime.toFixed(2)}秒`);
-    }
-  }, [songInfo.currentTime, isPlaying]);  // 依赖项包括currentTime和isPlaying，确保任何一个变化都能触发更新
-  //显示当前词
-  useEffect(() => {
-    const word = lyrics.flatMap(line => line.words).find(w => w.time.toFixed(1) === songInfo.currentTime.toFixed(1));
-    console.log("word：",word)
-    setCurrentWord(word);
+  const [times, { add, remove }] = useSet();
+
+  const currentWord = useMemo(() => {
+    return getCurrentWord(songInfo.currentTime, words);
   }, [songInfo.currentTime]);
-  //判断手势
+
   useEffect(() => {
     if (currentWord && currentWord.recognize) {
       // 检查手势是否符合要求
       //console.log("当前单词：",currentWord.word)
+      console.log("当前手势：", gestureResult?.categoryName);
       if (gestureResult?.categoryName === currentWord.expectedGesture) {
-        console.log("当前手势：",gestureResult.categoryName)
         console.log("手势正确");
+        add(currentWord.time);
+        setShowSuccess(true);
       } else {
-        console.log("手势错误");
+        if (!times.has(currentWord.time)) {
+          setShowSuccess(false);
+        }
       }
-      const timeoutId = setTimeout(() => {
-        setCurrentWord(null);  // 超时自动失败消失
-      }, 2000);  // 超时时间为2秒
-
-      return () => clearTimeout(timeoutId);
+    } else {
+      setShowSuccess(false);
     }
-  }, [currentWord, gestureResult]);
+  }, [currentWord, gestureResult, add]);
+
+  const [showSuccess, setShowSuccess] = useState(false);
 
   return (
-    <Layout style={{ transition: "all 0.5s ease" }}>
+    <Layout style={{ transition: "all 0.5s ease", height: "100%" }}>
       <Content
         style={{ margin: "0 20rem", position: "relative", textAlign: "center" }}
       >
-        
+        <img
+          hidden={!currentWord?.gif}
+          src={
+            currentWord?.gif
+              ? require(`../../assets/images/${currentWord?.gif}`)
+              : null
+          }
+          alt=""
+          style={{
+            position: "absolute",
+            top: "20%",
+            left: 10,
+            width: 300,
+            height: 200,
+            borderRadius: 6,
+            zIndex: 11,
+          }}
+        />
+
+        <div style={{ position: "absolute", top: "20%", right: 100 }}>
+          <h2> 得分: {times.size}</h2>
+        </div>
+
         <Player
           isPlaying={isPlaying}
           setIsPlaying={setIsPlaying}
@@ -208,6 +235,11 @@ const MusicGame = () => {
           onTimeUpdate={updateTimeHandler}
           ref={audioRef}
           src={currentSong.audio}
+          onEnded={() => {
+            message.info(
+              JSON.stringify(words.filter((v) => !times.has(v.time)))
+            );
+          }}
         />
         <video
           ref={videoRef}
@@ -254,7 +286,11 @@ const MusicGame = () => {
           <h1>Gesture: {category?.categoryName}</h1>
           <h1>Confidence: {score}%</h1>
         </div>
-        <Song currentSong={currentSong} currentTime={songInfo.currentTime} style={{ marginTop: "2rem" }}/>
+        <Song
+          currentSong={currentSong}
+          currentTime={songInfo.currentTime}
+          showSuccess={showSuccess}
+        />
       </Content>
     </Layout>
   );

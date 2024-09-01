@@ -12,39 +12,39 @@ export const chapterData = [
     learning: [
       {
         title: "你好",
-        gif: "https://image.pngaaa.com/441/1126441-middle.png",
+        gif: require(`../../assets/images/你好.gif`),
       },
       {
         title: "认识",
-        gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
+        gif: require(`../../assets/images/见面.png`),
       },
       {
         title: "感谢",
-        gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
+        gif: require(`../../assets/images/感谢.gif`),
       },
       {
         title: "我",
-        gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
+        gif: require(`../../assets/images/我.png`),
       },
       {
         title: "名字",
-        gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
+        gif: require(`../../assets/images/名字.png`),
       },
       {
         title: "微笑",
-        gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
+        gif: require(`../../assets/images/微笑.png`),
       },
       {
         title: "时间",
-        gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
+        gif: require(`../../assets/images/时间.jpg`),
       },
       {
         title: "幸福",
-        gif: "https://www.seekpng.com/png/detail/37-372109_final-blends-fist-cartoon-png.png",
+        gif: require(`../../assets/images/幸福.png`),
       },
       {
         title: "一天",
-        gif: "https://thumbs.dreamstime.com/z/image-cartoon-human-hand-gesture-open-palm-waving-vector-illustration-isolated-white-background-60283111.jpg",
+        gif: require(`../../assets/images/一天.png`),
       },
     ],
     musicGame: [

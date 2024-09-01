@@ -1,25 +1,90 @@
 const lyrics = [
-    {
-        starttime: 9,
-        words: [
-            { time: 9, word: "你好", expectedGesture: "nihao", recognize: true, gif: "https://www.bing.com/images/search?view=detailV2&ccid=JNGo%2Fl9x&id=9D27B74E0C66B96C61D5AE91C0A7E74AF172311C&thid=OIP.JNGo_l9xYRBQHMHElSVrlQAAAA&mediaurl=https%3A%2F%2Fth.bing.com%2Fth%2Fid%2FR.24d1a8fe5f716110501cc1c495256b95%3Frik%3DHDFy8Urnp8CRrg%26riu%3Dhttp%253a%252f%252fpic.baike.soso.com%252fp%252f20140409%252fbki-20140409101029-415176077.jpg%26ehk%3DLZv9co%252fedfPxopFOZwy87s%252bjAefxVHkIQukOqXatkCU%253d%26risl%3D%26pid%3DImgRaw%26r%3D0&exph=165&expw=249&q=%E6%89%8B%E8%AF%AD%E4%BD%A0%E5%A5%BD&simid=607986504605450322&FORM=IRPRST&ck=1A08F076C6623DDEF6A27F12AB319F4A&selectedIndex=6&itb=0&cw=1339&ch=643&ajaxhist=0&ajaxserp=0" },
-            { time: 10, word: "朋友", expectedGesture: "friend", recognize: false, gif: "https://www.bing.com/images/search?view=detailV2&ccid=uccTK6i6&id=B1C442122CBBE5DD59FA134CC8F507F4144BF786&thid=OIP.uccTK6i6--tRlYRfo797IwAAAA&mediaurl=https%3A%2F%2Fd.bmcx.com%2Fshouyu%2F_file%2F7%2F56fc20591abccceb.png&exph=150&expw=180&q=%E6%89%8B%E8%AF%AD%E6%9C%8B%E5%8F%8B&simid=608020954551964701&FORM=IRPRST&ck=6CFDE5CB1DF04C480F0D1851968EAFB2&selectedIndex=0&itb=0&cw=1339&ch=643&ajaxhist=0&ajaxserp=0" },
-            { time: 11, word: "很高兴", expectedGesture: "happy", recognize: true, gif: "https://www.bing.com/images/search?view=detailV2&ccid=TSbZOPKu&id=3F49AEBCF09CCB8419C81CFF974826AE5575CB6C&thid=OIP.TSbZOPKuR2IkSflQt5a7XQHaDM&mediaurl=https%3A%2F%2Fimgs.zsbeike.com%2Fimgs%2FC%2FC10474%2Fc10474.0067.3%5B0aa69d591268%5D.jpg&exph=616&expw=1425&q=%E6%89%8B%E8%AF%AD%E9%AB%98%E5%85%B4&simid=607986706460930922&FORM=IRPRST&ck=090BE4721418D687374D82149785745A&selectedIndex=6&itb=0&cw=1339&ch=643&ajaxhist=0&ajaxserp=0" },
-            { time: 12.2, word: "认识", expectedGesture: "meet", recognize: true, gif: "url" },
-            { time: 12.8, word: "你", expectedGesture: "ni", recognize: true, gif: "url" },
-            { time: 14, word: "感谢", expectedGesture: "thanks", recognize: true, gif: "https://www.bing.com/images/search?view=detailV2&ccid=nJd7sSH0&id=D7916F56A811BE387F684CE7BDDE6A79EECD0D0B&thid=OIP.nJd7sSH0z0ENPktyLsIBWAHaHt&mediaurl=https%3a%2f%2fbpic.588ku.com%2felement_origin_min_pic%2f19%2f04%2f29%2f83eb0fc802d65918bd4128ca494d775e.jpg&exph=677&expw=650&q=%e6%89%8b%e8%af%ad%e5%8a%a8%e5%9b%be&simid=608047776576319716&FORM=IRPRST&ck=BE83DF853799FE4A048439D42296503D&selectedIndex=0&itb=0&idpp=overlayview&ajaxhist=0&ajaxserp=0" },
-            { time: 14.2, word: "有", expectedGesture: "have", recognize: false, gif: "url" },
-            { time: 14.5, word: "你", expectedGesture: "ni", recognize: true, gif: "url" },
-            { time: 15, word: "请", expectedGesture: "please", recognize: false, gif: "url" },
-            { time: 16, word: "保持", expectedGesture: "keep", recognize: false, gif: "url" },
-            { time: 16.5, word: "快乐", expectedGesture: "happy", recognize: true, gif: "url" },
-        ]
-    },
-    // Add more lines here
+  {
+    starttime: 9,
+    words: [
+      {
+        time: 9,
+        word: "你好",
+        expectedGesture: "你好",
+        recognize: true,
+        gif: "你好.gif",
+      },
+      {
+        time: 10,
+        word: "朋友",
+        expectedGesture: "朋友",
+        recognize: false,
+        //gif: "你好.gif",
+      },
+      {
+        time: 11,
+        word: "很高兴",
+        expectedGesture: "高兴",
+        recognize: true,
+        //gif: "你好.gif",
+      },
+      {
+        time: 12,
+        word: "认识",
+        expectedGesture: "认识",
+        recognize: true,
+        gif: "见面.png",
+      },
+      {
+        time: 13,
+        word: "你",
+        expectedGesture: "你",
+        recognize: false,
+        //gif: "你.jpg",
+      },
+      {
+        time: 14,
+        word: "感谢",
+        expectedGesture: "感谢",
+        recognize: true,
+        gif: "感谢.gif",
+      },
+      {
+        time: 14.5,
+        word: "有",
+        expectedGesture: "有",
+        recognize: false,
+        //gif: "null",
+      },
+      {
+        time: 15,
+        word: "你",
+        expectedGesture: "你",
+        recognize: true,
+        gif: "你.jpg",
+      },
+      {
+        time: 16,
+        word: "请",
+        expectedGesture: "请",
+        recognize: false,
+        //gif: "null",
+      },
+      {
+        time: 17,
+        word: "保持",
+        expectedGesture: "保持",
+        recognize: false,
+        //gif: "你好.gif",
+      },
+      {
+        time: 18,
+        word: "快乐",
+        expectedGesture: "快乐",
+        recognize: true,
+        //gif: "你好.gif",
+      },
+    ],
+  },
+  // Add more lines here
 ];
 
 export default lyrics;
-
 
 // [Verse 1]
 // 你好，朋友，很高兴认识你，

@@ -8,7 +8,6 @@ import { Flex, Modal, Steps } from "antd";
 import gesture_recognizer_task from "../../config/models/gesture_recognizer3.task";
 import { useToMusicGame } from "../../config/app-router/navigate";
 import { useCurrChapterLearning } from "../../utils/hooks/chapter";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const Chapter = () => {
   const toMusicGame = useToMusicGame();
@@ -148,32 +147,39 @@ const Chapter = () => {
   };
 
   const isShowTip = useRef(false);
+  
+  const isWaiting = useRef(false); // 用来跟踪延迟状态
   useEffect(() => {
     if (current <= items.length && categoryScore >= 70) {
       const title = items[current]?.title;
       const bool = title === categoryName;
-      if (bool) {
-        next();
-
-        if (title === items.at(-1)?.title && !isShowTip.current) {
-          isShowTip.current = true;
-          Modal.confirm({
-            title: "成功 ！",
-            width: 240,
-            centered: true,
-            cancelButtonProps: { style: { display: "none" } },
-            maskClosable: false,
-            keyboard: false,
-            okText: "确定",
-            onOk: () => {
-              isShowTip.current = false;
-              toMusicGame(chapter); // 点击确定后跳转到 musicGame 页面
-            },
-          });
-        }
+      if (bool && !isWaiting.current) { // 仅当没有延迟进行时才继续
+        isWaiting.current = true; // 标记为延迟正在进行
+        setTimeout(() => {
+          next();
+          isWaiting.current = false; // 延迟结束后重置标记
+  
+          if (title === items.at(-1)?.title && !isShowTip.current) {
+            isShowTip.current = true;
+            Modal.confirm({
+              title: "成功 ！",
+              width: 240,
+              centered: true,
+              cancelButtonProps: { style: { display: "none" } },
+              maskClosable: false,
+              keyboard: false,
+              okText: "确定",
+              onOk: () => {
+                isShowTip.current = false;
+                toMusicGame(chapter); // 点击确定后跳转到 musicGame 页面
+              },
+            });
+          }
+        }, 1000); // 延迟1秒
       }
     }
   }, [categoryName, categoryScore, chapter, current, items, toMusicGame]);
+  
 
   const stepsItems = useMemo(() => {
     return items.map((item, index) => ({
@@ -194,7 +200,7 @@ const Chapter = () => {
   return (
     <Flex>
       <Steps
-        style={{ width: 500 }}
+        style={{ width: 300 }}
         direction="vertical"
         current={current}
         items={stepsItems}

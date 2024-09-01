@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout, Menu } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
-import "E:/SignLanguageGame/signbeats/src/index.css";
+// import "E:/SignLanguageGame/signbeats/src/index.css";
 
 const { Footer } = Layout;
 

@@ -17,3 +17,7 @@
 .FooterComponent:last-child{
  display: none;
 } 
+
+#root{
+  height: 100%;
+}
