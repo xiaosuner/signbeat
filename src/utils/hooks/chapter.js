@@ -18,3 +18,7 @@ export const useCurrChapterMusicGame = () => {
   const [{ musicGame = [] }, chapter] = useCurrChapter();
   return [musicGame, chapter];
 };
+export const useCurrChapterFeedback = () => {
+  const [{ feedback = [] }, chapter] = useCurrChapter();
+  return [feedback, chapter];
+};

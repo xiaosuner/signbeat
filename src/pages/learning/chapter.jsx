@@ -198,48 +198,55 @@ const Chapter = () => {
   }, [items, current]);
 
   return (
-    <Flex>
-      <Steps
-        style={{ width: 300 }}
-        direction="vertical"
-        current={current}
-        items={stepsItems}
-      />
-
-      <div>
-        <h1>categoryName:{categoryName}</h1>
-        <h1>
-          Is there a Hand?{" "}
-          {categoryScore >= 70 ? (
-            <span style={{ color: "green" }}>Yes</span>
-          ) : (
-            <span style={{ color: "red" }}>No</span>
-          )}
-          <p>categoryScore:{categoryScore}</p>
-        </h1>
-
-        <section id="demos" className="invisible">
-          <div id="liveView" className="videoView">
-            <button id="webcamButton" className="mdc-button mdc-button--raised">
-              <span className="mdc-button__ripple"></span>
-              <span className="mdc-button__label">ENABLE WEBCAM</span>
-            </button>
-            <div style={{ position: "relative" }}>
-              <video id="webcam" autoPlay playsInline></video>
-              <canvas
-                className="output_canvas"
-                id="output_canvas"
-                width="1280"
-                height="720"
-                style={{ position: "absolute", left: "0px", top: "0px" }}
-              ></canvas>
-              <p id="gesture_output" className="output" />
+    <div style={{ height: "100vh", padding: "20px" }}>
+      <h1 style={{ textAlign: "center" }}>Chapter 1</h1> {/* 添加标题并居中对齐 */}
+      
+      <Flex
+        style={{ justifyContent: "center", alignItems: "flex-start", flexDirection: "row" }} // 修改为 alignItems: "flex-start" 使元素顶部对齐
+      >
+        <Steps
+          style={{ width: 300, marginRight: "20px" }} // 添加右边距使内容不贴太近
+          direction="vertical"
+          current={current}
+          items={stepsItems}
+        />
+  
+        <div>
+          <h2>Sign: {categoryName}</h2>
+          <h2>Accuracy: {categoryScore}</h2>
+            {/* Is there a Hand?{" "}
+            {categoryScore >= 70 ? (
+              <span style={{ color: "green" }}>Yes</span>
+            ) : (
+              <span style={{ color: "red" }}>No</span>
+            )} */}
+         
+  
+          <section id="demos" className="invisible">
+            <div id="liveView" className="videoView">
+              <button id="webcamButton" className="mdc-button mdc-button--raised" style={{ marginTop: "-10px" }}>
+                <span className="mdc-button__ripple"></span>
+                <span className="mdc-button__label">ENABLE WEBCAM</span>
+              </button>
+              <div style={{ position: "relative", marginTop: "10px" }}>
+                <video id="webcam" autoPlay playsInline></video>
+                <canvas
+                  className="output_canvas"
+                  id="output_canvas"
+                  width="1280"
+                  height="720"
+                  style={{ position: "absolute", left: "0px", top: "0px" }}
+                ></canvas>
+                <p id="gesture_output" className="output" />
+              </div>
             </div>
-          </div>
-        </section>
-      </div>
-    </Flex>
+          </section>
+        </div>
+      </Flex>
+    </div>
   );
+  
+  
 };
 
 export default Chapter;

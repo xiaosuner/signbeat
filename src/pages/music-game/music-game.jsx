@@ -16,6 +16,8 @@ import lyrics from "./lyrics";
 import { getCurrentWord } from "./utils";
 import { useSet } from "ahooks";
 import { message } from "antd";
+import { useToFeedBack } from "../../config/app-router/navigate";
+import Feedback from "../feedback/feedback";
 
 const { Content } = Layout;
 
@@ -24,7 +26,9 @@ const runningMode = "VIDEO";
 const words = lyrics.flatMap((line) => line.words);
 
 const MusicGame = () => {
-  const [songs] = useCurrChapterMusicGame();
+  const toFeedback = useToFeedBack();
+
+  const [songs,chapter] = useCurrChapterMusicGame();
 
   const audioRef = useRef(null);
   const [currentSong, setCurrentSong] = useState(() => songs[0]);
@@ -118,6 +122,7 @@ const MusicGame = () => {
             delegate: "GPU",
           },
           runningMode,
+          numHands: 2,
         }
       );
       const constraints = { video: true };
@@ -151,7 +156,7 @@ const MusicGame = () => {
   }, [category?.score]);
 
   useEffect(() => {
-    if (!isReady && category?.categoryName === "感谢" && score > 70) {
+    if (!isReady && category?.categoryName === "好" && score > 70) {
       setStartText("Start");
       setTimeout(() => {
         setIsReady(true);
@@ -239,6 +244,9 @@ const MusicGame = () => {
             message.info(
               JSON.stringify(words.filter((v) => !times.has(v.time)))
             );
+            //toFeedback(chapter); // 在歌曲结束时跳转到新页面
+            toFeedback(chapter, times.size); // 在歌曲结束时跳转到新页面，并传递 times.size
+      
           }}
         />
         <video

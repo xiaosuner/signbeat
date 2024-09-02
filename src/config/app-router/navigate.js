@@ -21,3 +21,17 @@ export const useToMusicGame = () => {
     nv(`/${chapter}/${RouterKey.MusicGame}`, options);
   };
 };
+// export const useToFeedBack = () => {
+//   const nv = useNavigate();
+//   return (chapter, options) => {
+//     nv(`/${chapter}/${RouterKey.FeedBack}`, options);
+//   };
+// };
+export const useToFeedBack = () => {
+  const nv = useNavigate();
+  return (chapter, score) => {
+    console.log(score)
+    nv(`/${chapter}/${RouterKey.FeedBack}`, { state: { score } });
+  };
+};
+
